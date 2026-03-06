@@ -36,12 +36,6 @@ st.set_page_config(
     page_icon="🌿",
     layout="wide"
 )
-
-st.link_button(
-    "🌐 Acessar site da Nutriaxton",
-    "https://nutriaxton.com"
-)
-
 # =========================
 # CSS / ESTILO
 # =========================
@@ -289,45 +283,130 @@ if os.path.exists(LOGO_PATH):
 st.markdown("""
 <h1>Nutri Intelligent</h1>
 <p class="hero-sub">
-Assistente oficial da Nutriaxton.
-Pergunte sobre suplementos, performance ou bem-estar.
+Assistente oficial da Nutriaxton. Pergunte sobre suplementos, performance ou bem-estar.
 </p>
 """, unsafe_allow_html=True)
+
+st.link_button("Acessar site da Nutriaxton", "https://www.nutriaxton.com.br/")
 
 # =========================
 # CARDS DE PRODUTOS
 # =========================
+
+if "produto_aberto" not in st.session_state:
+    st.session_state["produto_aberto"] = None
+
 st.markdown("## Produtos Nutriaxton")
 
-c1, c2, c3 = st.columns(3)
+if st.session_state["produto_aberto"] is None:
+    c1, c2, c3 = st.columns(3)
 
-with c1:
-    st.markdown("""
-    <div class="card-box">
-        <h3>Creatina Nutriaxton</h3>
-        <p>Suplemento voltado para força, desempenho e rotina esportiva.</p>
-        <p><b>Destaque:</b> performance física.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    with c1:
+        st.markdown("""
+        <div class="card-box">
+            <h3>Creatina Nutriaxton</h3>
+            <p>Suplemento voltado para força, desempenho e rotina esportiva.</p>
+            <p><strong>Destaque:</strong> performance física.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-with c2:
-    st.markdown("""
-    <div class="card-box">
-        <h3>Collaxton Q-10</h3>
-        <p>Produto focado em beleza, bem-estar e autocuidado.</p>
-        <p><b>Destaque:</b> comunicação premium.</p>
-    </div>
-    """, unsafe_allow_html=True)
+        if st.button("Ver detalhes", key="btn_creatina"):
+            st.session_state["produto_aberto"] = "creatina"
+            st.rerun()
 
-with c3:
-    st.markdown("""
-    <div class="card-box">
-        <h3>Cartsin</h3>
-        <p>Produto da linha Nutriaxton com posicionamento sofisticado.</p>
-        <p><b>Destaque:</b> confiança e elegância.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
+    with c2:
+        st.markdown("""
+        <div class="card-box">
+            <h3>Collaxton Q-10</h3>
+            <p>Produto focado em beleza, bem-estar e autocuidado.</p>
+            <p><strong>Destaque:</strong> comunicação premium.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.button("Ver detalhes", key="btn_collaxton"):
+            st.session_state["produto_aberto"] = "collaxton"
+            st.rerun()
+
+    with c3:
+        st.markdown("""
+        <div class="card-box">
+            <h3>Cartsin</h3>
+            <p>Produto da linha Nutriaxton com posicionamento sofisticado.</p>
+            <p><strong>Destaque:</strong> confiança e elegância.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.button("Ver detalhes", key="btn_cartsin"):
+            st.session_state["produto_aberto"] = "cartsin"
+            st.rerun()
+
+else:
+    produto = st.session_state["produto_aberto"]
+
+    if produto == "creatina":
+        st.markdown("""
+        <div class="card-box">
+            <h2>Creatina Nutriaxton</h2>
+            <p>Suplemento voltado para força, desempenho e rotina esportiva.</p>
+            <p><strong>Destaque:</strong> performance física.</p>
+            <p><strong>Indicação:</strong> ideal para quem busca apoio em treinos, potência muscular e constância na rotina esportiva.</p>
+            <p><strong>Perfil:</strong> atletas, praticantes de musculação e pessoas com foco em performance.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    elif produto == "collaxton":
+        st.markdown("""
+        <div class="card-box">
+            <h2>Collaxton Q-10</h2>
+            <p>Produto focado em beleza, bem-estar e autocuidado.</p>
+            <p><strong>Destaque:</strong> comunicação premium.</p>
+            <p><strong>Indicação:</strong> pensado para rotinas de cuidado pessoal, bem-estar e imagem premium da marca.</p>
+            <p><strong>Perfil:</strong> consumidores que valorizam beleza, sofisticação e autocuidado.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    elif produto == "cartsin":
+        st.markdown("""
+        <div class="card-box">
+            <h2>Cartsin</h2>
+            <p>Produto da linha Nutriaxton com posicionamento sofisticado.</p>
+            <p><strong>Destaque:</strong> confiança e elegância.</p>
+            <p><strong>Indicação:</strong> produto com presença institucional forte, alinhado à identidade premium da Nutriaxton.</p>
+            <p><strong>Perfil:</strong> público que busca confiança, imagem refinada e credibilidade.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    col_back, col_buy = st.columns([1, 1])
+
+    with col_back:
+        if st.button("Voltar para produtos"):
+            st.session_state["produto_aberto"] = None
+            st.rerun()
+
+    with col_buy:
+        if produto == "creatina":
+            st.link_button("Comprar", "https://nutriaxton.com.br/creatina")
+        elif produto == "collaxton":
+            st.link_button("Comprar", "https://nutriaxton.com.br/collaxton-q10")
+        elif produto == "cartsin":
+            st.link_button("Comprar", "https://nutriaxton.com.br/cartsin")
+
+st.markdown("""
+<style>
+.card-box {
+    background: linear-gradient(180deg,#0B1220,#0A162B);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 22px;
+    padding: 26px;
+    transition: all .25s ease;
+}
+.card-box:hover {
+    border-color: rgba(16,185,129,0.4);
+    transform: translateY(-4px);
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown('<div class="soft-line"></div>', unsafe_allow_html=True)
 
 # =========================
