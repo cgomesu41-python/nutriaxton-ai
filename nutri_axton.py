@@ -45,94 +45,100 @@ st.link_button(
 # =========================
 # CSS / ESTILO
 # =========================
+
 st.markdown("""
 <style>
-:root {
-    --bg: #050816;
-    --panel: #0B1220;
-    --card: #0F172A;
-    --line: #1F2937;
-    --text: #F8FAFC;
-    --muted: #94A3B8;
-    --brand: #10B981;
-}
 
-html, body, [class*="css"] {
-    color: var(--text);
-}
+/* fundo */
 
 .stApp {
-    background: linear-gradient(180deg, #030712 0%, #06101f 100%);
+    background: radial-gradient(circle at top, #020617 0%, #020617 40%, #030712 100%);
 }
+
+/* container */
 
 .block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    max-width: 1220px;
+    max-width: 1100px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 
-h1, h2, h3 {
-    color: var(--text) !important;
-    letter-spacing: -0.02em;
-}
+/* tipografia */
 
-p, label, div {
-    color: var(--text);
-}
-
-[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #081225 0%, #0A1020 100%);
-    border-right: 1px solid rgba(255,255,255,0.06);
-}
-
-.stChatMessage {
-    border-radius: 16px;
-    padding: 10px;
-    background: rgba(255,255,255,0.02);
-}
-
-.stButton > button, .stLinkButton > a {
-    width: 100%;
-    border-radius: 14px !important;
-    border: 1px solid rgba(16,185,129,0.35) !important;
-    background: rgba(16,185,129,0.08) !important;
-    color: #ECFDF5 !important;
-    font-weight: 600 !important;
-}
-
-.stButton > button:hover, .stLinkButton > a:hover {
-    border-color: rgba(16,185,129,0.8) !important;
-    background: rgba(16,185,129,0.14) !important;
-}
-
-.card-box {
-    background: linear-gradient(180deg, #0B1324 0%, #0A162B 100%);
-    border: 1px solid rgba(16,185,129,0.16);
-    border-radius: 20px;
-    padding: 22px;
-    min-height: 250px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-    transition: transform .18s ease, border-color .18s ease;
-}
-
-.card-box:hover {
-    transform: translateY(-3px);
-    border-color: rgba(16,185,129,0.45);
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
 }
 
 .hero-sub {
-    color: var(--muted);
-    font-size: 1.03rem;
-    margin-top: .25rem;
-    margin-bottom: 1rem;
+    color: #94A3B8;
+    font-size: 1.15rem;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
 }
+
+/* cards */
+
+.card-box {
+    background: linear-gradient(180deg,#0B1220,#0A162B);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 22px;
+    padding: 26px;
+    transition: all .25s ease;
+}
+
+.card-box:hover {
+    border-color: rgba(16,185,129,0.4);
+    transform: translateY(-4px);
+}
+
+/* chat */
+
+.stChatMessage {
+    border-radius: 16px;
+    padding: 12px;
+    background: rgba(255,255,255,0.02);
+}
+
+/* input */
+
+.stChatInput input {
+    border-radius: 20px;
+}
+
+/* botões */
+
+.stButton > button, .stLinkButton > a {
+
+    border-radius: 30px !important;
+    padding: 10px 20px !important;
+
+    border: 1px solid rgba(16,185,129,0.4) !important;
+    background: rgba(16,185,129,0.08) !important;
+
+    font-weight: 500 !important;
+}
+
+.stButton > button:hover, .stLinkButton > a:hover {
+
+    border-color: rgba(16,185,129,0.8) !important;
+    background: rgba(16,185,129,0.15) !important;
+}
+
+/* divisória suave */
 
 .soft-line {
     height: 1px;
-    background: linear-gradient(90deg, rgba(16,185,129,0), rgba(16,185,129,.35), rgba(16,185,129,0));
-    margin: 1.2rem 0 1.8rem 0;
-    border: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(16,185,129,0),
+        rgba(16,185,129,0.4),
+        rgba(16,185,129,0)
+    );
+    margin: 2rem 0;
 }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -278,21 +284,20 @@ with st.sidebar:
 # HERO / TOPO
 # =========================
 if os.path.exists(LOGO_PATH):
-    st.image(LOGO_PATH, width=220)
+    st.image(LOGO_PATH, width=200)
 
 st.markdown("""
-<h1 style='margin-bottom:0.2rem;'> Nutri Intelligent</h1>
-<p class="hero-sub">Assistente inteligente da Nutriaxton</p>
+<h1>Nutri Intelligent</h1>
+<p class="hero-sub">
+Assistente oficial da Nutriaxton.
+Pergunte sobre suplementos, performance ou bem-estar.
+</p>
 """, unsafe_allow_html=True)
-
-st.link_button("🌐 Acessar site da Nutriaxton", "https://www.nutriaxton.com.br/")
-
-st.markdown('<div class="soft-line"></div>', unsafe_allow_html=True)
 
 # =========================
 # CARDS DE PRODUTOS
 # =========================
-st.markdown("## Nossos produtos")
+st.markdown("## Produtos Nutriaxton")
 
 c1, c2, c3 = st.columns(3)
 
@@ -300,8 +305,8 @@ with c1:
     st.markdown("""
     <div class="card-box">
         <h3>Creatina Nutriaxton</h3>
-        <p>Suplemento voltado para desempenho, força e rotina esportiva.</p>
-        <p><strong>Destaque:</strong> apoio à performance física.</p>
+        <p>Suplemento voltado para força, desempenho e rotina esportiva.</p>
+        <p><b>Destaque:</b> performance física.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -309,8 +314,8 @@ with c2:
     st.markdown("""
     <div class="card-box">
         <h3>Collaxton Q-10</h3>
-        <p>Produto voltado para beleza, bem-estar e rotina de autocuidado.</p>
-        <p><strong>Destaque:</strong> comunicação premium e elegante.</p>
+        <p>Produto focado em beleza, bem-estar e autocuidado.</p>
+        <p><b>Destaque:</b> comunicação premium.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -318,11 +323,11 @@ with c3:
     st.markdown("""
     <div class="card-box">
         <h3>Cartsin</h3>
-        <p>Produto da linha Nutriaxton com posicionamento de confiança e sofisticação.</p>
-        <p><strong>Destaque:</strong> seguir sempre os documentos oficiais.</p>
+        <p>Produto da linha Nutriaxton com posicionamento sofisticado.</p>
+        <p><b>Destaque:</b> confiança e elegância.</p>
     </div>
     """, unsafe_allow_html=True)
-
+    
 st.markdown('<div class="soft-line"></div>', unsafe_allow_html=True)
 
 # =========================
