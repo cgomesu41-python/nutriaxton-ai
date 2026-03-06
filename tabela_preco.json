@@ -1,0 +1,27 @@
+{
+  "produtos": [
+    {
+      "nome": "Creatina Nutriaxton 300g",
+      "opcoes": [
+        {
+          "quantidade": 1,
+          "preco": 132.00,
+          "debito": 115.50,
+          "pix": 109.72
+        },
+        {
+          "quantidade": 2,
+          "preco": 264.00,
+          "debito": 211.20,
+          "pix": 200.64
+        },
+        {
+          "quantidade": 3,
+          "preco": 396.00,
+          "debito": 297.00,
+          "pix": 282.15
+        }
+      ]
+    }
+  ]
+}
