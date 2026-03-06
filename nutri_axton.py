@@ -232,8 +232,14 @@ base_empresa = ler_base_txt()
 base_pdf = ler_pdfs()
 import os
 import pandas as pd
-BASE_DIR = os.path.dirname(__file__)
-PRICE_TABLE_PATH = os.path.join(BASE_DIR, "..", "docs", "TABELA DE PRECOS NUTRIAXTON.xlsx")
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+PRICE_TABLE_PATH = os.path.join(BASE_DIR, "docs", "TABELA DE PRECOS NUTRIAXTON.xlsx")
+
+st.write("BASE_DIR:", BASE_DIR)
+st.write("PRICE_TABLE_PATH:", PRICE_TABLE_PATH)
+st.write("Arquivo existe?", os.path.exists(PRICE_TABLE_PATH))
 
 precos_df = pd.read_excel(PRICE_TABLE_PATH)
 # =========================
@@ -368,3 +374,4 @@ if texto_usuario:
     st.session_state["lista_mensagens"].append(
         {"role": "assistant", "content": texto_resposta_ia}
     )
+
