@@ -1,8 +1,8 @@
 import os
-import pandas as pd
 import streamlit as st
 from openai import OpenAI
 from pypdf import PdfReader
+import json
 
 # =========================
 # CAMINHOS
@@ -19,15 +19,15 @@ LOGO_PATH = os.path.join(ASSETS_DIR, "logo.png")
 # CONFIG DA PÁGINA
 # =========================
 
-st.link_button(
-    "🌐 Acessar site da Nutriaxton",
-    "https://nutriaxton.com"
-)
-
 st.set_page_config(
     page_title="Nutri Intelligent",
     page_icon="🌿",
     layout="wide"
+)
+
+st.link_button(
+    "🌐 Acessar site da Nutriaxton",
+    "https://nutriaxton.com"
 )
 
 # =========================
@@ -133,6 +133,11 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # FUNÇÕES
 # =========================
 
+PRECOS_PATH = os.path.join(DOCS_DIR, "tabela_preco.json")
+
+with open(PRECOS_PATH, "r", encoding="utf-8") as f:
+    precos = json.load(f)
+
 texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
 
@@ -146,12 +151,7 @@ def ler_base_txt():
 def buscar_preco(produto):
     produto = produto.lower()
 
-    palavras_chave = [
-        "creatina",
-        "collaxton",
-        "cartsin"
-    ]
-
+    palavras_chave = ["creatina", "collaxton", "cartsin"]
     produto_encontrado = None
 
     for palavra in palavras_chave:
@@ -162,15 +162,15 @@ def buscar_preco(produto):
     if not produto_encontrado:
         return None
 
-    for _, row in precos_df.iterrows():
-        nome = str(row["PRODUTOS"]).lower()
+    for item in precos:
+        nome = item.get("produto", "").lower()
 
         if produto_encontrado in nome:
             return {
-                "produto": row["PRODUTOS"],
-                "preco": row["PREÇO"],
-                "debito": row["DÉBITO"],
-                "pix": row["PIX"]
+                "produto": item.get("produto", ""),
+                "preco": item.get("preco", ""),
+                "debito": item.get("debito", ""),
+                "pix": item.get("pix", "")
             }
 
     return None
@@ -230,18 +230,7 @@ def ler_pdfs():
 # =========================
 base_empresa = ler_base_txt()
 base_pdf = ler_pdfs()
-import os
-import pandas as pd
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-PRICE_TABLE_PATH = os.path.join(BASE_DIR, "docs", "TABELA DE PRECOS NUTRIAXTON.xlsx")
-
-st.write("BASE_DIR:", BASE_DIR)
-st.write("PRICE_TABLE_PATH:", PRICE_TABLE_PATH)
-st.write("Arquivo existe?", os.path.exists(PRICE_TABLE_PATH))
-
-precos_df = pd.read_excel(PRICE_TABLE_PATH)
 # =========================
 # SYSTEM PROMPT
 # =========================
@@ -374,4 +363,3 @@ if texto_usuario:
     st.session_state["lista_mensagens"].append(
         {"role": "assistant", "content": texto_resposta_ia}
     )
-
