@@ -220,25 +220,14 @@ with st.sidebar:
         ]
         st.rerun()
 
-st.markdown("""
-<h1 style='margin-bottom: 0.2rem;'>🌿 Nutri Intelligent</h1>
-<p style='color: #9CA3AF; font-size: 1.05rem; margin-top: 0;'>
-Assistente inteligente da Nutriaxton
-</p>
-""", unsafe_allow_html=True)
-
-st.link_button("🌐 Acessar site da Nutriaxton", "https://nutriaxton.com.br")
-
-st.divider()
-
 # =========================
 # HERO / TOPO
 # =========================
 if os.path.exists(LOGO_PATH):
-    st.image(LOGO_PATH, width=260)
+    st.image(LOGO_PATH, width=220)
 
 st.markdown("""
-<h1 style="margin-bottom:0.2rem;">Nutri Intelligent</h1>
+<h1 style='margin-bottom:0.2rem;'> Nutri Intelligent</h1>
 <p class="hero-sub">Assistente inteligente da Nutriaxton</p>
 """, unsafe_allow_html=True)
 
