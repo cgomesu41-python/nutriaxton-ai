@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import streamlit as st
 from openai import OpenAI
 from pypdf import PdfReader
@@ -127,13 +128,12 @@ p, label, div {
 # CLIENTE OPENAI
 # =========================
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-modo = st.selectbox(
-    "Modo de consulta",
-    ["Informações sobre produtos", "Recomendação personalizada", "Dúvidas gerais"]
-)
+
 # =========================
 # FUNÇÕES
 # =========================
+
+texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
 st.link_button("Comprar", "https://nutriaxton.com.br/creatina")
 
@@ -142,6 +142,39 @@ def ler_base_txt():
         with open(BASE_TXT_PATH, "r", encoding="utf-8") as f:
             return f.read()
     return "Base textual da empresa não encontrada."
+
+def buscar_preco(produto):
+    
+    produto = produto.lower()
+    
+    for _, row in precos_df.iterrows():
+        nome = str(row["PRODUTOS"]).lower()
+        
+        if produto in nome:
+            return {
+                "produto": row["PRODUTOS"],
+                "preco": row["PREÇO"],
+                "debito": row["DÉBITO"],
+                "pix": row["PIX"]
+            }
+    
+    return None
+
+if "preço" in texto_usuario.lower() or "quanto custa" in texto_usuario.lower():
+
+    resultado = buscar_preco(texto_usuario)
+
+    if resultado:
+        resposta = f"""
+Produto: {resultado['produto']}
+
+Preço: R$ {resultado['preco']}
+Débito: R$ {resultado['debito']}
+PIX: R$ {resultado['pix']}
+"""
+        st.chat_message("assistant").write(resposta)
+        st.stop()
+
 
 def ler_pdfs():
     texto = ""
@@ -168,6 +201,9 @@ def ler_pdfs():
 # =========================
 base_empresa = ler_base_txt()
 base_pdf = ler_pdfs()
+PRICE_TABLE_PATH = "docs/TABELA DE PRECOS NUTRIAXTON.xlsx"
+
+precos_df = pd.read_excel(PRICE_TABLE_PATH)
 
 # =========================
 # SYSTEM PROMPT
@@ -281,7 +317,6 @@ for mensagem in st.session_state["lista_mensagens"]:
 # =========================
 # INPUT
 # =========================
-texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
 if texto_usuario:
     st.session_state["lista_mensagens"].append(
