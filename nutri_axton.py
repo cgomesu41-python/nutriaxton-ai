@@ -230,10 +230,12 @@ def ler_pdfs():
 # =========================
 base_empresa = ler_base_txt()
 base_pdf = ler_pdfs()
-PRICE_TABLE_PATH = "docs/TABELA DE PRECOS NUTRIAXTON.xlsx"
+import os
+import pandas as pd
+BASE_DIR = os.path.dirname(__file__)
+PRICE_TABLE_PATH = os.path.join(BASE_DIR, "..", "docs", "TABELA DE PRECOS NUTRIAXTON.xlsx")
 
 precos_df = pd.read_excel(PRICE_TABLE_PATH)
-
 # =========================
 # SYSTEM PROMPT
 # =========================
