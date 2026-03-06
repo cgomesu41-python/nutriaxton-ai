@@ -127,10 +127,16 @@ p, label, div {
 # CLIENTE OPENAI
 # =========================
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
+modo = st.selectbox(
+    "Modo de consulta",
+    ["Informações sobre produtos", "Recomendação personalizada", "Dúvidas gerais"]
+)
 # =========================
 # FUNÇÕES
 # =========================
+
+st.link_button("Comprar", "https://nutriaxton.com.br/creatina")
+
 def ler_base_txt():
     if os.path.exists(BASE_TXT_PATH):
         with open(BASE_TXT_PATH, "r", encoding="utf-8") as f:
@@ -208,17 +214,11 @@ with st.sidebar:
     st.divider()
 
     st.markdown("**Produtos disponíveis**")
-    st.write("💪 Creatina Nutriaxton")
-    st.write("✨ Collaxton Q-10")
-    st.write("🌿 Cartsin")
+    st.write("Creatina Nutriaxton")
+    st.write("Collaxton Q-10")
+    st.write("Cartsin")
 
     st.divider()
-
-    if st.button("🧹 Limpar conversa"):
-        st.session_state["lista_mensagens"] = [
-            {"role": "system", "content": SYSTEM_PROMPT}
-        ]
-        st.rerun()
 
 # =========================
 # HERO / TOPO
@@ -245,44 +245,29 @@ c1, c2, c3 = st.columns(3)
 with c1:
     st.markdown("""
     <div class="card-box">
-        <h3>💪 Creatina Nutriaxton</h3>
+        <h3>Creatina Nutriaxton</h3>
         <p>Suplemento voltado para desempenho, força e rotina esportiva.</p>
         <p><strong>Destaque:</strong> apoio à performance física.</p>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Saiba mais sobre Creatina", key="btn_creatina"):
-        st.session_state["lista_mensagens"].append(
-            {"role": "user", "content": "Me explique a Creatina Nutriaxton."}
-        )
-        st.rerun()
 
 with c2:
     st.markdown("""
     <div class="card-box">
-        <h3>✨ Collaxton Q-10</h3>
+        <h3>Collaxton Q-10</h3>
         <p>Produto voltado para beleza, bem-estar e rotina de autocuidado.</p>
         <p><strong>Destaque:</strong> comunicação premium e elegante.</p>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Saiba mais sobre Collaxton", key="btn_collaxton"):
-        st.session_state["lista_mensagens"].append(
-            {"role": "user", "content": "Me explique o Collaxton Q-10."}
-        )
-        st.rerun()
 
 with c3:
     st.markdown("""
     <div class="card-box">
-        <h3>🌿 Cartsin</h3>
+        <h3>Cartsin</h3>
         <p>Produto da linha Nutriaxton com posicionamento de confiança e sofisticação.</p>
         <p><strong>Destaque:</strong> seguir sempre os documentos oficiais.</p>
     </div>
     """, unsafe_allow_html=True)
-    if st.button("Saiba mais sobre Cartsin", key="btn_cartsin"):
-        st.session_state["lista_mensagens"].append(
-            {"role": "user", "content": "Me explique o produto Cartsin."}
-        )
-        st.rerun()
 
 st.markdown('<div class="soft-line"></div>', unsafe_allow_html=True)
 
@@ -296,7 +281,7 @@ for mensagem in st.session_state["lista_mensagens"]:
 # =========================
 # INPUT
 # =========================
-texto_usuario = st.chat_input("Digite sua mensagem")
+texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
 if texto_usuario:
     st.session_state["lista_mensagens"].append(
