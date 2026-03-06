@@ -135,7 +135,6 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
-st.link_button("Comprar", "https://nutriaxton.com.br/creatina")
 
 def ler_base_txt():
     if os.path.exists(BASE_TXT_PATH):
@@ -143,37 +142,67 @@ def ler_base_txt():
             return f.read()
     return "Base textual da empresa não encontrada."
 
+
 def buscar_preco(produto):
-    
     produto = produto.lower()
-    
+
+    palavras_chave = [
+        "creatina",
+        "collaxton",
+        "cartsin"
+    ]
+
+    produto_encontrado = None
+
+    for palavra in palavras_chave:
+        if palavra in produto:
+            produto_encontrado = palavra
+            break
+
+    if not produto_encontrado:
+        return None
+
     for _, row in precos_df.iterrows():
         nome = str(row["PRODUTOS"]).lower()
-        
-        if produto in nome:
+
+        if produto_encontrado in nome:
             return {
                 "produto": row["PRODUTOS"],
                 "preco": row["PREÇO"],
                 "debito": row["DÉBITO"],
                 "pix": row["PIX"]
             }
-    
+
     return None
 
-if "preço" in texto_usuario.lower() or "quanto custa" in texto_usuario.lower():
 
-    resultado = buscar_preco(texto_usuario)
+if texto_usuario:
+    texto = texto_usuario.lower()
 
-    if resultado:
-        resposta = f"""
-Produto: {resultado['produto']}
+    if any(p in texto for p in [
+        "preço",
+        "preco",
+        "quanto custa",
+        "valor",
+        "pix",
+        "débito",
+        "debito",
+        "custa",
+        "price"
+    ]):
+        resultado = buscar_preco(texto_usuario)
 
-Preço: R$ {resultado['preco']}
-Débito: R$ {resultado['debito']}
-PIX: R$ {resultado['pix']}
+        if resultado:
+            resposta = f"""
+**Produto:** {resultado['produto']}
+
+**Preço:** R$ {resultado['preco']}
+**Débito:** R$ {resultado['debito']}
+**PIX:** R$ {resultado['pix']}
 """
-        st.chat_message("assistant").write(resposta)
-        st.stop()
+            st.chat_message("assistant").write(resposta)
+            st.link_button("Comprar", "https://nutriaxton.com.br/creatina")
+            st.stop()
 
 
 def ler_pdfs():
