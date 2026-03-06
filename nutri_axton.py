@@ -147,9 +147,6 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 PRECOS_PATH = os.path.join(DOCS_DIR, "tabela_preco.json")
 
-texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
-
-
 def ler_base_txt():
     if os.path.exists(BASE_TXT_PATH):
         with open(BASE_TXT_PATH, "r", encoding="utf-8") as f:
