@@ -1,8 +1,20 @@
 import os
+import json
 import streamlit as st
 from openai import OpenAI
 from pypdf import PdfReader
-import json
+
+# =========================
+# CAMINHOS
+# =========================
+BASE_DIR = os.path.dirname(__file__)                 # pasta /main
+ROOT_DIR = os.path.dirname(BASE_DIR)                 # pasta raiz do projeto
+
+ASSETS_DIR = os.path.join(ROOT_DIR, "assets")
+DOCS_DIR = os.path.join(ROOT_DIR, "docs")
+BASE_TXT_PATH = os.path.join(BASE_DIR, "base_nutriaxton.txt")
+LOGO_PATH = os.path.join(ASSETS_DIR, "logo.png")
+PRECOS_PATH = os.path.join(DOCS_DIR, "tabela_preco.json")
 
 # =========================
 # CAMINHOS
@@ -135,9 +147,6 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 PRECOS_PATH = os.path.join(DOCS_DIR, "tabela_preco.json")
 
-with open(PRECOS_PATH, "r", encoding="utf-8") as f:
-    precos = json.load(f)
-
 texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
 
@@ -146,7 +155,6 @@ def ler_base_txt():
         with open(BASE_TXT_PATH, "r", encoding="utf-8") as f:
             return f.read()
     return "Base textual da empresa não encontrada."
-
 
 def buscar_preco(produto):
     produto = produto.lower()
@@ -162,19 +170,7 @@ def buscar_preco(produto):
     if not produto_encontrado:
         return None
 
-    for item in precos:
-        nome = item.get("produto", "").lower()
-
-        if produto_encontrado in nome:
-            return {
-                "produto": item.get("produto", ""),
-                "preco": item.get("preco", ""),
-                "debito": item.get("debito", ""),
-                "pix": item.get("pix", "")
-            }
-
-    return None
-
+texto_usuario = st.chat_input("Pergunte sobre suplementos, performance ou bem-estar")
 
 if texto_usuario:
     texto = texto_usuario.lower()
@@ -201,7 +197,6 @@ if texto_usuario:
 **PIX:** R$ {resultado['pix']}
 """
             st.chat_message("assistant").write(resposta)
-            st.link_button("Comprar", "https://nutriaxton.com.br/creatina")
             st.stop()
 
 
